@@ -215,6 +215,11 @@ helm-info-<CANDIDATE>."
       (funcall helm-info-function)
       (ring-insert helm-info-searched candidate))))
 
+(defun helm-info-open-file (candidate)
+  "Open Info file CANDIDATE."
+  (Info-goto-node (format "(%s)" candidate))
+  (ring-insert helm-info-searched candidate))
+
 (defun helm-def-source--info-files ()
   "Return a Helm source for Info files."
   (helm-build-sync-source "Helm Info"
@@ -225,7 +230,8 @@ helm-info-<CANDIDATE>."
     (lambda (candidates)
       (sort candidates #'string-lessp))
     :nomark t
-    :action '(("Search index" . helm-info-search-index))))
+    :action '(("Search index" . helm-info-search-index)
+              ("Open Info file" . helm-info-open-file))))
 
 ;;;###autoload
 (defun helm-info (&optional refresh)
